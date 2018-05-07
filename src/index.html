@@ -18,10 +18,91 @@
     <![endif]-->
   </head>
   <body>
-    <div class="header">EET to ASL Grammar Converter</div>
+    <div class="container">
+      <div class="py-5 text-center">
+        <h2>EET to ASL Grammar Converter</h2>
+        <p class="lead">Learning tool for English speaking hearing people learning ASL, who want to switch from EET to ASL grammar</p>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 order-md-1">
+          <h4 class="mb-3">English Sentence</h4>
+          <form class="needs-validation" id="converterForm" novalidate>
+            <div class="row">
+              <div class="col-md-3 mb-3">
+                <label for="eetSubject">Subject</label>
+                <input type="text" class="form-control" id="eetSubject" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                  Valid subject is required.
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="eetVerb">Verb</label>
+                <input type="text" class="form-control" id="eetVerb" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                  Valid verb is required.
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="eetObject">Object</label>
+                <input type="text" class="form-control" id="eetObject" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                  Valid object is required.
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="eetTime">Time</label>
+                <input type="text" class="form-control" id="eetTime" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                  Valid time is required.
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary btn-lg btn-block" type="submit">Convert</button>
+          </form>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 order-md-1">
+          <br />
+          <h4 class="mb-3">ASL Grammar</h4>
+            <div class="row">
+              <div class="col-md-3 mb-3">
+                <label for="aslTime">Time</label>
+                <input type="text" class="form-control" id="aslTime" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                  Valid time is required.
+                </div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="aslObject">Object</label>
+                <input type="text" class="form-control" id="aslObject" placeholder="" value="" required>
+                <div class="invalid-feedback">
+                  Valid object is required.
+                </div>
+              </div>
+            <div class="col-md-3 mb-3">
+              <label for="aslSubject">Subject</label>
+              <input type="text" class="form-control" id="aslSubject" placeholder="" value="" required>
+              <div class="invalid-feedback">
+                Valid subject is required.
+              </div>
+            </div>
+            <div class="col-md-3 mb-3">
+              <label for="aslVerb">Verb</label>
+              <input type="text" class="form-control" id="aslVerb" placeholder="" value="" required>
+              <div class="invalid-feedback">
+                Valid verb is required.
+              </div>
+            </div>
+        </div>
+      </div>
+
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="convert.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="../lib/bootstrap-4.1.1-dist/js/bootstrap.min.js"></script>
   </body>
