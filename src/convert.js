@@ -7,15 +7,19 @@ $(document).ready(function(){
 })
 
 
-
-
 function convertEetToASL(e) {
-  let subject = $("#eetSubject").val();
-  $("#aslSubject").val(subject);
-  let object = $("#eetObject").val();
-  $("#aslObject").val(object);
-  let verb = $("#eetVerb").val();
-  $("#aslVerb").val(verb);
-  let time = $("#eetTime").val();
-  $("#aslTime").val(time);
+    let subject = $("#eetSubject").val();
+    $("#aslSubject").val(subject);
+    let object = $("#eetObject").val();
+    $("#aslObject").val(object);
+    let verb = $("#eetVerb").val();
+    $("#aslVerb").val(verb);
+    let time = $("#eetTime").val();
+    $("#aslTime").val(time);
+}
+
+function getTokens(e) {
+    $.post( "ajax/test.html", function( data ) {
+      $( ".result" ).html( data );
+    });
 }
