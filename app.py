@@ -1,6 +1,6 @@
 import spacy
 from flask import Flask, request, jsonify, render_template
-nlp = spacy.load('en_core_web_md')
+nlp = spacy.load('en_core_web_sm')
 app = Flask(__name__, static_url_path='/static', template_folder='templates')
 
 
