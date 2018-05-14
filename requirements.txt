@@ -2,7 +2,6 @@ click==6.7
 cymem==1.31.2
 cytoolz==0.8.2
 dill==0.2.7.1
-en-core-web-sm==2.0.0
 Flask==1.0.2
 gunicorn==19.8.1
 itsdangerous==0.24
@@ -25,3 +24,5 @@ tqdm==4.23.2
 ujson==1.35
 Werkzeug==0.14.1
 wrapt==1.10.11
+
+https://github.com/explosion/spacy-models/releases/download/en_core_web_md-2.0.0/en_core_web_md-2.0.0.tar.gz
