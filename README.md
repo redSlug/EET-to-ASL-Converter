@@ -1,3 +1,3 @@
-# EET to ASL Grammar Converter
+# EET to OSV Grammar Converter
 
-Learning tool for English speaking hearing people learning ASL, who want to switch from EET to ASL grammar.
+Learning tool for people learning ASL, who want to switch from an Exact English Translation to an expression resembling topicalized Object Subject Verb order

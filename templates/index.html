@@ -4,11 +4,13 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <title>EET to ASL Grammar Converter</title>
+    <title>EET to OSV Converter</title>
 
     <!-- Bootstrap -->
-    <link href="../lib/bootstrap-4.1.1-dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='lib/bootstrap-4.1.1-dist/css/bootstrap.min.css') }}" rel="stylesheet">
 
     <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -20,8 +22,8 @@
   <body>
     <div class="container">
       <div class="py-5 text-center">
-        <h2>EET to ASL Grammar Converter</h2>
-        <p class="lead">Learning tool for English speaking hearing people learning ASL, who want to switch from EET to ASL grammar</p>
+        <h2>EET to OSV Converter</h2>
+        <p class="lead">Learning tool for people learning ASL, who want to switch from an Exact English Translation to an expression resembling topicalized Object Subject Verb order</p>
       </div>
 
       <div class="row">
@@ -58,52 +60,83 @@
                 </div>
               </div>
             </div>
-            <button class="btn btn-primary btn-lg btn-block" type="submit">Convert</button>
           </form>
+        </div>
+      </div>
+
+      <div id=top class="row collapse">
+        <div class="col-md-12 order-md-1">
+            <div class="row">
+              <div class="col-md-3 mb-3">
+                <label for="aslTime">Time</label>
+                <div id="aslTime"></div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="aslObject">Object</label>
+                <div id="aslObject"></div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="aslSubject">Subject</label>
+                <div id="aslSubject"></div>
+              </div>
+              <div class="col-md-3 mb-3">
+                <label for="aslVerb">Verb</label>
+                <div id="aslVerb"></div>
+              </div>
+          </div>
         </div>
       </div>
 
       <div class="row">
         <div class="col-md-12 order-md-1">
-          <br />
-          <h4 class="mb-3">ASL Grammar</h4>
+          <button class="btn btn-primary btn-lg btn-block" id="convertButton" type="button">Convert</button>
+        </div>
+      </div>
+
+      <hr class="col-m-12">
+
+      <div class="row">
+        <div class="col-md-12 order-md-1">
+          <form class="needs-validation" id="converterLongForm" novalidate>
+            <h4 class="mb-3">English Text</h4>
             <div class="row">
-              <div class="col-md-3 mb-3">
-                <label for="aslTime">Time</label>
-                <input type="text" class="form-control" id="aslTime" placeholder="" value="" required>
+              <div class="col-md-12 mb-3">
+                <input type="text" class="form-control" id="eetParagraph" placeholder="" value="" required>
                 <div class="invalid-feedback">
-                  Valid time is required.
+                  Valid subject is required.
                 </div>
               </div>
-              <div class="col-md-3 mb-3">
-                <label for="aslObject">Object</label>
-                <input type="text" class="form-control" id="aslObject" placeholder="" value="" required>
-                <div class="invalid-feedback">
-                  Valid object is required.
-                </div>
-              </div>
-            <div class="col-md-3 mb-3">
-              <label for="aslSubject">Subject</label>
-              <input type="text" class="form-control" id="aslSubject" placeholder="" value="" required>
-              <div class="invalid-feedback">
-                Valid subject is required.
-              </div>
             </div>
-            <div class="col-md-3 mb-3">
-              <label for="aslVerb">Verb</label>
-              <input type="text" class="form-control" id="aslVerb" placeholder="" value="" required>
-              <div class="invalid-feedback">
-                Valid verb is required.
-              </div>
+          </form>
+        </div>
+      </div>
+
+      <div id=bottom class="row collapse">
+        <div class="col-md-12 order-md-1">
+          <div class="row">
+            <div class="col-md-12 mb-3">
+              <p id="bottomConverted"></p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12 order-md-1">
+            <button class="btn btn-primary btn-lg btn-block" id="convertParagraphButton" type="button">Convert Text</button>
         </div>
       </div>
 
 
+    </div>
+
+
+
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script src="convert.js"></script>
+    <script src="{{ url_for('static', filename='convert.js') }}"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="../lib/bootstrap-4.1.1-dist/js/bootstrap.min.js"></script>
+    <script src="{{ url_for('static', filename='lib/bootstrap-4.1.1-dist/js/bootstrap.min.js') }}"></script>
   </body>
 </html>
