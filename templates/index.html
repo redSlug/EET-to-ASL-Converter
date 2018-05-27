@@ -26,44 +26,6 @@
         <p class="lead">Learning tool for people learning ASL, who want to switch from an Exact English Translation to an expression resembling topicalized Object Subject Verb order</p>
       </div>
 
-      <div class="row">
-        <div class="col-md-12 order-md-1">
-          <h4 class="mb-3">English Sentence</h4>
-          <form class="needs-validation" id="converterForm" novalidate>
-            <div class="row">
-              <div class="col-md-3 mb-3">
-                <label for="eetSubject">Subject</label>
-                <input type="text" class="form-control" id="eetSubject" placeholder="" value="" required>
-                <div class="invalid-feedback">
-                  Valid subject is required.
-                </div>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label for="eetVerb">Verb</label>
-                <input type="text" class="form-control" id="eetVerb" placeholder="" value="" required>
-                <div class="invalid-feedback">
-                  Valid verb is required.
-                </div>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label for="eetObject">Object</label>
-                <input type="text" class="form-control" id="eetObject" placeholder="" value="" required>
-                <div class="invalid-feedback">
-                  Valid object is required.
-                </div>
-              </div>
-              <div class="col-md-3 mb-3">
-                <label for="eetTime">Time</label>
-                <input type="text" class="form-control" id="eetTime" placeholder="" value="" required>
-                <div class="invalid-feedback">
-                  Valid time is required.
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </div>
-
       <div id=top class="row collapse">
         <div class="col-md-12 order-md-1">
             <div class="row">
@@ -89,21 +51,13 @@
 
       <div class="row">
         <div class="col-md-12 order-md-1">
-          <button class="btn btn-primary btn-lg btn-block" id="convertButton" type="button">Convert</button>
-        </div>
-      </div>
-
-      <hr class="col-m-12">
-
-      <div class="row">
-        <div class="col-md-12 order-md-1">
           <form class="needs-validation" id="converterLongForm" novalidate>
             <h4 class="mb-3">English Text</h4>
             <div class="row">
               <div class="col-md-12 mb-3">
                 <input type="text" class="form-control" id="eetParagraph" placeholder="" value="" required>
                 <div class="invalid-feedback">
-                  Valid subject is required.
+                  Valid text is required.
                 </div>
               </div>
             </div>
@@ -123,14 +77,17 @@
 
       <div class="row">
         <div class="col-md-12 order-md-1">
-            <button class="btn btn-primary btn-lg btn-block" id="convertParagraphButton" type="button">Convert Text</button>
+            <button class="btn btn-primary btn-lg btn-block" id="convertParagraphButton" type="button">Convert</button>
         </div>
       </div>
 
-
+      <div id="videos" class="row collapse mt-4">
+        <div class="col-md-12 order-md-1">
+            <h4 class="mb-3">Videos</h4>
+              <div id="signVideos"></div>
+        </div>
+      </div>
     </div>
-
-
 
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

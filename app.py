@@ -1,5 +1,9 @@
 import spacy
 from flask import Flask, request, jsonify, render_template
+from bs4 import BeautifulSoup
+import requests
+from functools import reduce
+
 nlp = spacy.load('en_core_web_sm')
 app = Flask(__name__, static_url_path='/static', template_folder='templates')
 
@@ -11,8 +15,28 @@ def root():
 
 @app.route("/get_tosv_sentence", methods=["POST"])
 def get_tosv_sentence():
-    s = request.get_json()
-    return jsonify(get_tokens(nlp(s)))
+    doc = nlp(request.get_json())
+    sentences_data = get_sentences_with_videos(doc)
+    # TODO maybe later return more videos for each pos
+    sentences = \
+        [
+            dict(subjects=[t.text for t in s.subjects],
+                 objects=[t.text for t in s.objects],
+                 times=[t.text for t in s.times],
+                 verbs=[t.text for t in s.verbs]
+                 )
+            for s in sentences_data
+        ]
+    videos = [
+        [(t.text.capitalize(), t.video, t.source) for t in s.times] +
+        [(t.lemma.capitalize(), t.video, t.source) for t in s.objects] +
+        [(t.text.capitalize(), t.video, t.source) for t in s.subjects] +
+        [(t.lemma.capitalize(), t.video, t.source) for t in s.verbs]
+         for s in sentences_data
+    ]
+    videos = reduce(lambda x, y: x + y, videos) if videos else []
+    videos = [v for v in videos if v[1]]
+    return jsonify(dict(sentences=sentences, videos=videos))
 
 
 def _print_tokens(doc):
@@ -22,52 +46,95 @@ def _print_tokens(doc):
     print()
 
 
-def _append_token_before_adjs(t, key, token, adjs):
-    t[key].append(token.text)
-    while adjs:
-        t[key].append(adjs.pop(0))
+def get_video_url(w):
+    try:
+        r = requests.get('https://www.signingsavvy.com/search/' + w.lower())
+        soup = BeautifulSoup(r.content, 'html.parser')
+        url = "https://www.signingsavvy.com/" + \
+              [x for x in soup.find_all('a') if x.contents[0] == w.upper()][0].attrs[
+                  'href']
+        r = requests.get(url)
+        soup = BeautifulSoup(r.content, 'html.parser')
+        video_path = soup.find_all('video')[0].contents[0].attrs['src']
+        video_url = 'https://www.signingsavvy.com/' + video_path
+        print("video_url={}".format(video_url))
+        return video_url, url
+    except:
+        return None, None
 
 
-def get_tokens(doc):
+class PartOfSpeech:
+    VERB = 1
+    OBJECT = 2
+    SUBJECT = 3
+    TIME = 4
+
+
+class Token:
+    def __init__(self, text, lemma, pos):
+        self.part_of_speech = pos
+        self.text = text
+        self.lemma = lemma  # use to find videos for objects and verbs
+        text = lemma if pos is PartOfSpeech.OBJECT or pos is PartOfSpeech.VERB else text
+        self.video, self.source = get_video_url(text)
+
+
+class Sentence:
+    def __init__(self):
+        self.verbs = list()
+        self.subjects = list()
+        self.objects = list()
+        self.times = list()
+
+    def add_word(self, pos, token, adjs):
+        word_list = None
+        if pos == PartOfSpeech.VERB:
+            word_list = self.verbs
+        if pos == PartOfSpeech.SUBJECT:
+            word_list = self.subjects
+        if pos == PartOfSpeech.OBJECT:
+            word_list = self.objects
+        if pos == PartOfSpeech.TIME:
+            word_list = self.times
+        word_list.append(Token(text=token.text, lemma=token.lemma_, pos=pos))
+        while adjs:
+            word_list.append(adjs.pop(0))
+
+
+def get_sentences_with_videos(doc):
     sentences = list()
-    t = None
+    sentence = None
     # adjectives go after subjects or objects
     adjs = []
-    be_verbs = ['am', 'is', 'are', 'were', 'was', 'be', 'will']
+
     for token in doc:
-        if not t:
-            t = dict(
-                verbs=[],
-                subjects=[],
-                objects=[],
-                times=[]
-            )
+        if not sentence:
+            sentence = Sentence()
         token_pos = token.pos_
-        token_text = token.text.lower()
         if token_pos == 'VERB':
             # 'to be' verbs are not used in ASL
-            if token_text in be_verbs or "'" in token_text:
+            if token.lemma_ == 'be':
                 continue
-            t['verbs'].append(token_text)
+            sentence.add_word(PartOfSpeech.VERB, token, adjs)
         elif token_pos == 'NOUN':
-            if token.dep_ == 'npadvmod':
-                _append_token_before_adjs(t, 'times', token, adjs)
+            if token.dep_ == 'npadvmod':        # modifiers are adjectives
+                sentence.add_word(PartOfSpeech.TIME, token, adjs)
             else:
-                _append_token_before_adjs(t, 'objects', token, adjs)
+                sentence.add_word(PartOfSpeech.OBJECT, token, adjs)
         elif token_pos == 'PRON':
             if token.dep_ == 'npadvmod':
-                _append_token_before_adjs(t, 'times', token, adjs)
-            elif not t['subjects']:
-                # just append first subject
-                _append_token_before_adjs(t, 'subjects', token, adjs)
+                sentence.add_word(PartOfSpeech.TIME, token, adjs)
+            elif not sentence.subjects:         # just append first subject
+                sentence.add_word(PartOfSpeech.SUBJECT, token, adjs)
         elif token_pos == 'ADJ':
-            adjs.append(token_text)
-        elif token_pos == 'PUNCT' or token_text is 'then':
-            if t['verbs'] and t['subjects']:
-                sentences.append(t)
-                t = None
-    if t:
-        sentences.append(t)
+            adjs.append(token.text)
+        elif token_pos == 'PUNCT' or token.text is 'then':  # new sentence
+            if sentence.verbs and (sentence.objects or sentence.subjects):
+                sentences.append(sentence)
+                adjs = None
+                sentence = None
+    if sentence.verbs and (sentence.objects or sentence.subjects):
+        sentences.append(sentence)
     return sentences
 
 

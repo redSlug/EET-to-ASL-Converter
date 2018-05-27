@@ -1,10 +1,5 @@
 $(document).ready(function(){
   console.log("page loaded");
-  $("#convertButton").click(function(e){
-    e.preventDefault();
-    convertEetToASL();
-  });
-
   $("#convertParagraphButton").click(function(e){
     e.preventDefault();
     getTokens();
@@ -12,25 +7,37 @@ $(document).ready(function(){
 })
 
 
-function convertEetToASL(e) {
-    let subject = $("#eetSubject").val();
-    $("#aslSubject").html(subject);
-    let object = $("#eetObject").val();
-    $("#aslObject").html(object);
-    let verb = $("#eetVerb").val();
-    $("#aslVerb").html(verb);
-    let time = $("#eetTime").val();
-    $("#aslTime").html(time);
-    $( "#top" ).removeClass( "collapse" )
+const doc = document;
+
+function setSentence(s) {
+    let times = (s.times.length ? "Time: " + s.times.join() + ", " : "");
+    let objects = (s.objects.length ? "Object: " + s.objects.join() + ", " : "");
+    let subjects = (s.subjects.length ? "Subject: " + s.subjects.join() + ", ": "");
+    let verbs = (s.verbs.length ? "Verb: " + s.verbs.join() + "" : "");
+    $("#bottomConverted").html($("#bottomConverted").html() +  times +  objects +  subjects +  verbs + "<br />");
 }
 
+function setVideo(v) {
+    let video_container = document.createElement("div")
+    video_container.classList.add("d-inline-block")
 
-function setNewSentence(d) {
-    let times = (d.times.length ? "Time: " + d.times.join() + ", " : "");
-    let objects = (d.objects.length ? "Object: " + d.objects.join() + ", " : "");
-    let subjects = (d.subjects.length ? "Subject: " + d.subjects.join() + ", ": "");
-    let verbs = (d.verbs.length ? "Verb: " + d.verbs.join() + "" : "");
-    $("#bottomConverted").html($("#bottomConverted").html() +  times +  objects +  subjects +  verbs + "<br />");
+    let video_description = document.createElement("a")
+    video_description.innerText = v[0]
+    video_description.classList.add("row")
+    video_description.classList.add("m-2")
+    video_description.href = v[2]
+
+    let video_iframe = document.createElement("iframe")
+    video_iframe.src = v[1]
+    video_iframe.classList.add("row")
+    video_iframe.classList.add("m-2")
+    video_iframe.width = 325
+    video_iframe.height = 230
+
+    let videos = document.querySelector("#signVideos")
+    video_container.appendChild(video_description)
+    video_container.appendChild(video_iframe)
+    videos.appendChild(video_container)
 }
 
 
@@ -42,8 +49,21 @@ function getTokens(e) {
     contentType: "application/json",
     complete: function(data){
             $("#bottomConverted").html("");
-            data.responseJSON.forEach(setNewSentence);
-            $( "#bottom" ).removeClass( "collapse" );
+            data.responseJSON['sentences'].forEach(setSentence);
+            $("#bottom").removeClass( "collapse" );
+
+            // clear out previous videos and hide
+            $("#bottom").addClass( "collapse" );
+            let signVideos = document.querySelector("#signVideos")
+            while (signVideos.firstChild) {
+                signVideos.removeChild(signVideos.firstChild)
+            }
+
+            // populate new videos and un-hide
+            data.responseJSON['videos'].forEach(setVideo);
+            if (data.responseJSON['videos'].length > 0) {
+                $("#videos").removeClass( "collapse" );
+            }
         }
     });
 }
