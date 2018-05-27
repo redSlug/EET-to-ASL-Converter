@@ -15,7 +15,6 @@ function setSentence(s) {
     let subjects = (s.subjects.length ? "Subject: " + s.subjects.join() + ", ": "");
     let verbs = (s.verbs.length ? "Verb: " + s.verbs.join() + "" : "");
     $("#sentencesConverted").html($("#sentencesConverted").html() +  times +  objects +  subjects +  verbs + "<br />");
-    debugger
 }
 
 function setVideo(v) {

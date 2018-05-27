@@ -39,13 +39,6 @@ def get_tosv_sentence():
     return jsonify(dict(sentences=sentences, videos=videos))
 
 
-def _print_tokens(doc):
-    for token in doc:
-        print("txt={:15s}\tlemma={:10s}\tpos={:10s}\ttag={:10s}\t\tdep={}".format(
-            token.text, token.lemma_, token.pos_, token.tag_, token.dep_))
-    print()
-
-
 def get_video_url(w):
     try:
         r = requests.get('https://www.signingsavvy.com/search/' + w.lower())
@@ -67,6 +60,7 @@ class PartOfSpeech:
     OBJECT = 2
     SUBJECT = 3
     TIME = 4
+    MOD = 5
 
 
 class Token:
@@ -126,7 +120,7 @@ def get_sentences_with_videos(doc):
             elif not sentence.subjects:         # just append first subject
                 sentence.add_word(PartOfSpeech.SUBJECT, token, adjs)
         elif token_pos == 'ADJ':
-            adjs.append(token.text)
+            adjs.append(Token(text=token.text, lemma=token.lemma_, pos=PartOfSpeech.MOD))
         elif token_pos == 'PUNCT' or token.text is 'then':  # new sentence
             if sentence.verbs and (sentence.objects or sentence.subjects):
                 sentences.append(sentence)
