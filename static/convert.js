@@ -14,7 +14,8 @@ function setSentence(s) {
     let objects = (s.objects.length ? "Object: " + s.objects.join() + ", " : "");
     let subjects = (s.subjects.length ? "Subject: " + s.subjects.join() + ", ": "");
     let verbs = (s.verbs.length ? "Verb: " + s.verbs.join() + "" : "");
-    $("#bottomConverted").html($("#bottomConverted").html() +  times +  objects +  subjects +  verbs + "<br />");
+    $("#sentencesConverted").html($("#sentencesConverted").html() +  times +  objects +  subjects +  verbs + "<br />");
+    debugger
 }
 
 function setVideo(v) {
@@ -40,7 +41,6 @@ function setVideo(v) {
     videos.appendChild(video_container)
 }
 
-
 function getTokens(e) {
     $.ajax({
     url: "get_tosv_sentence",
@@ -48,18 +48,20 @@ function getTokens(e) {
     data: JSON.stringify($("#eetParagraph").val()),
     contentType: "application/json",
     complete: function(data){
-            $("#bottomConverted").html("");
+
+            // add and show sentences
+            let sentences = document.querySelector("#sentencesConverted")
             data.responseJSON['sentences'].forEach(setSentence);
-            $("#bottom").removeClass( "collapse" );
+            $("#sentences").removeClass( "collapse" );
 
             // clear out previous videos and hide
-            $("#bottom").addClass( "collapse" );
             let signVideos = document.querySelector("#signVideos")
-            while (signVideos.firstChild) {
+            $("#videos").addClass( "collapse" );
+             while (signVideos.firstChild) {
                 signVideos.removeChild(signVideos.firstChild)
             }
 
-            // populate new videos and un-hide
+            // populate new videos and show
             data.responseJSON['videos'].forEach(setVideo);
             if (data.responseJSON['videos'].length > 0) {
                 $("#videos").removeClass( "collapse" );

@@ -8,5 +8,11 @@ This is a tool people learning ASL, who wish to switch from an Exact English Tra
 - `pip install -r requirements.txt`
 - run locally `python main.py`
 
+## Deploy
+- create a heroku account and app
+- `heroku login`
+- `heroku git:remote -a <app name>`
+- `git push heroku master`
+
 ![picture of app](img.png)
 

@@ -57,7 +57,6 @@ def get_video_url(w):
         soup = BeautifulSoup(r.content, 'html.parser')
         video_path = soup.find_all('video')[0].contents[0].attrs['src']
         video_url = 'https://www.signingsavvy.com/' + video_path
-        print("video_url={}".format(video_url))
         return video_url, url
     except:
         return None, None
